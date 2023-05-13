@@ -276,6 +276,18 @@
           />
         </el-form-item>
         <el-form-item
+          label="岗位状态"
+          prop="status"
+        >
+          <el-radio-group v-model="form.status">
+            <el-radio
+              v-for="dict in dict.type.sys_normal_disable"
+              :key="dict.value"
+              :label="dict.value"
+            >{{ dict.label }}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item
           label="备注"
           prop="remark"
         >
@@ -341,6 +353,12 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        factoryName: [
+          { required: true, message: "厂家名称不能为空", trigger: "blur" }
+        ],
+        factoryCode: [
+          { required: true, message: "厂家编码不能为空", trigger: "blur" }
+        ],
       }
     }
   },
