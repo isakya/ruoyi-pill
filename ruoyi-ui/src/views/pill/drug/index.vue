@@ -19,10 +19,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item
-        label="生产厂家"
-        prop="factoryId"
-      >
+      <el-form-item label="生产厂家">
         <el-input
           v-model="queryParams['pillFactory.factoryName']"
           placeholder="请输入生产厂家"
@@ -314,10 +311,17 @@
           label="生产厂家"
           prop="factoryId"
         >
-          <el-input
+          <el-select
             v-model="form.factoryId"
-            placeholder="请输入生产厂家"
-          />
+            placeholder="请选择生产厂家"
+          >
+            <el-option
+              v-for="item in factoryList"
+              :key="item.factoryId"
+              :label="item.factoryName"
+              :value="item.factoryId"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item
           label="药品类型"
@@ -432,7 +436,7 @@
 
 <script>
 import { listDrug, getDrug, delDrug, addDrug, updateDrug } from "@/api/pill/drug"
-
+import { listFactory } from '@/api/pill/factory.js'
 export default {
   name: "Drug",
   dicts: ['pill_drug_pt', 'pill_drug_dt', 'sys_normal_disable'],
@@ -452,6 +456,8 @@ export default {
       total: 0,
       // 药品信息表格数据
       drugList: [],
+      // 生产厂家数据
+      factoryList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -479,6 +485,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getFactoryList()
   },
   methods: {
     /** 查询药品信息列表 */
@@ -488,6 +495,11 @@ export default {
         this.drugList = response.rows
         this.total = response.total
         this.loading = false
+      })
+    },
+    getFactoryList() {
+      listFactory().then(response => {
+        this.factoryList = response.rows
       })
     },
     // 取消按钮
